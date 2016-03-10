@@ -148,7 +148,7 @@ pres_munis_DF <- read_excel("data/df2000-06.xlsx") %>%
 ## electoral results database by CIDAC, loaded to match with INAFED's historical database to fill 
 ## missing party data and party coalition members. goes from 1985 to part of 2012. It has some mistakes
 ## like in Arroyo Seco Quertaro when total votes exceeed by more than double previous years as well as
-## anulled vots. Other mistakes in Estado de México 2012 where only PRI votes were registered. Or in the BCS
+## anulled vots. Other mistakes in Estado de M?xico 2012 where only PRI votes were registered. Or in the BCS
 ##election in 2008 where votes for PRD-CONV-PT are set at zero, mistakenly giving victory to the PRI in some
 ## municipalities. The INAFED data may be more reliable in some cases like in El Salvador, 
 ## Zacatecas 2004 where therewas a tie. the CIDAC database only considers votes counted from election day, 
@@ -184,7 +184,7 @@ all_pct <- elec_mun %>%
 all_pct$party_CIDAC <- gsub("\\.", "-", all_pct$party_CIDAC)
 all_pct$party_CIDAC <- gsub("PANAL", "PNA", all_pct$party_CIDAC)
 
-##select parties with hieghts percentage, exclude Estado de México mistake
+##select parties with hieghts percentage, exclude Estado de M?xico mistake
 winners <- all_pct %>%
   mutate(muncode = as.numeric(as.character(muncode))) %>%
   group_by(year, muncode) %>%
@@ -225,13 +225,13 @@ pres_munis_final$year <- ifelse(pres_munis_final$CVE_ENT == 30 & pres_munis_fina
 ## join INAFED's database with CIDAC's
 all_pres_munis <- full_join(pres_munis_final, winners, by = c("muncode", "year")) %>%
   select(mun_name, CVE_ENT = CVE_ENT.x, CVE_MUN = CVE_MUN.x, muncode, title:sex, 
-         year_start = start, year_finish = finish, year_elec = year, party_INAFED, party_CIDAC, percent)
+         year_start = start, year_finish = finish, year_elec = year, party_INAFED, party_CIDAC)
 
-save(all_pres_munis, file = "allmunicipalities.RData")
+# save(all_pres_munis, file = "allmunicipalities.RData")
+# 
+# load("allmunicipalities.RData")
 
-load("allmunicipalities.RData")
 
-load("allmunicipalities1.RData")
 
 ##generate a dataframe for every year in power between 2005 and 2016, and clean party names. 
   
@@ -252,7 +252,7 @@ expan <- expan %>%
 
 expan$party_CIDAC <- ifelse(is.na(expan$party_CIDAC), expan$party_INAFED, expan$party_CIDAC)
 
-noparty <- c("COALICIÓN", "AXB", "COAL.", "C.C.", 
+noparty <- c("COALICI?N", "AXB", "COAL.", "C.C.", 
              "AXC", "CXBCH", "CXBDT", "CXBCHS", "CXBDC", "DESCONOCIDOS",
              "ALIANZA_", "CXBDCH", "CXBNT", "CXBNDT", "AXM", "CXBP",  "CQRA",
              "CPSL", "CSA", "ALIANZA", "CPBT", "CUXT", 
@@ -285,11 +285,11 @@ expan1$party_mixed <- gsub("CPU", "PAN-PRD", expan1$party_mixed)
 expan1$party_mixed <- gsub("CXBDT", "PRD", expan1$party_mixed)
 expan1$party_mixed <- ifelse(grepl("PAN-PRD", expan1$party_mixed), "PAN-PRD", expan1$party_mixed)
 expan1$party_mixed <- gsub("COAL.", "PRI", expan1$party_mixed , fixed = TRUE)
-expan1$party_mixed <- ifelse(expan1$party_mixed == "COALICIÓN" & expan1$muncode == " 5025", "PRI",  expan1$party_mixed)
-expan1$party_mixed <- ifelse(expan1$party_mixed == "CANDIDATURA COMÚN", "PRI",  expan1$party_mixed)
+expan1$party_mixed <- ifelse(expan1$party_mixed == "COALICI?N" & expan1$muncode == " 5025", "PRI",  expan1$party_mixed)
+expan1$party_mixed <- ifelse(expan1$party_mixed == "CANDIDATURA COM?N", "PRI",  expan1$party_mixed)
 
-expan1$party_mixed <- ifelse(expan1$party_mixed == "COALICIÓN" & expan1$CVE_ENT == "14", "PRD",  expan1$party_mixed)
-expan1$party_mixed <- ifelse(expan1$party_mixed == "COALICIÓN" & expan1$CVE_ENT == "30", "AVE",  expan1$party_mixed)
+expan1$party_mixed <- ifelse(expan1$party_mixed == "COALICI?N" & expan1$CVE_ENT == "14", "PRD",  expan1$party_mixed)
+expan1$party_mixed <- ifelse(expan1$party_mixed == "COALICI?N" & expan1$CVE_ENT == "30", "AVE",  expan1$party_mixed)
 
 big_p <- c("PRI", "PAN", "PRD", "PAN-PRD", "UYC")
 
@@ -304,4 +304,6 @@ expan2010_16 <- expan1 %>%
 
 #write.csv(expan2012_16, "party_mixed.csv")
 
+load("allmunicipalities.RData")
 
+all_pres_munis
